@@ -1,0 +1,26 @@
+Certainly! Here's an exercise for you to solve:
+
+Exercise: Managing a Product Inventory
+
+Create a table called "Products" in the database with the following columns:
+
+ID (int, primary key)
+Name (varchar)
+Price (double)
+Quantity (int)
+Create a Java class called "InventoryManagement" that connects to the database using JDBC.
+
+Add a method in the "InventoryManagement" class called "createProductsTable()" that executes the SQL query to create the "Products" table in the database.
+
+Add a method called "addProduct(Product product)" that accepts a "Product" object as a parameter and inserts the product data into the "Products" table in the database.
+
+Add a method called "getProducts()" that executes an SQL query to retrieve all products from the "Products" table in the database and returns a list of "Product" objects.
+
+Create a class called "Product" with attributes corresponding to the columns of the "Products" table in the database.
+
+In the "main" method of the "InventoryManagement" class, perform the following operations:
+
+Create an object of "InventoryManagement" and call the "createProductsTable()" method to create the "Products" table in the database.
+Create several "Product" objects with sample data and use the "addProduct(Product product)" method to insert them into the database.
+Use the "getProducts()" method to retrieve the products from the database and print them on the screen.
+This exercise provides a foundation for implementing a product inventory management system using JDBC in Java. You can further expand the code by adding additional functionalities, such as updating or deleting products.

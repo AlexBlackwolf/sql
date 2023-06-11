@@ -1,0 +1,111 @@
+utilizzando JDBC in Java:
+
+Traccia: Gestione di un elenco di studenti
+
+Creare una tabella chiamata "Studenti" nel database con le seguenti colonne:
+
+ID (int, chiave primaria)
+Nome (varchar)
+Cognome (varchar)
+Età (int)
+Creare una classe Java chiamata "GestioneStudenti" che si connette al database utilizzando JDBC.
+
+Aggiungere un metodo nella classe "GestioneStudenti" chiamato "creaTabellaStudenti()" che esegue la query SQL per creare la tabella "Studenti" nel database.
+
+Aggiungere un metodo chiamato "inserisciStudente(Studente studente)" che accetta un oggetto "Studente" come parametro e inserisce i dati dello studente nella tabella "Studenti" nel database.
+
+Aggiungere un metodo chiamato "recuperaStudenti()" che esegue una query SQL per recuperare tutti gli studenti dalla tabella "Studenti" nel database e restituisce una lista di oggetti "Studente".
+
+Creare una classe "Studente" con gli attributi corrispondenti alle colonne della tabella "Studenti" nel database.
+
+Nel metodo "main" della classe "GestioneStudenti", eseguire le seguenti operazioni:
+
+Creare un oggetto "GestioneStudenti" e chiamare il metodo "creaTabellaStudenti()" per creare la tabella "Studenti" nel database.
+Creare alcuni oggetti "Studente" con dati di esempio e utilizzare il metodo "inserisciStudente(Studente studente)" per inserirli nel database.
+Utilizzare il metodo "recuperaStudenti()" per recuperare gli studenti dal database e stamparli a schermo.
+Questa traccia ti offre una base su cui lavorare per implementare la gestione di un elenco di studenti utilizzando JDBC in Java. Puoi ampliare ulteriormente il codice aggiungendo altre funzionalità, come la modifica o l'eliminazione degli studenti.
+
+
+package com.crud.crud.connection;
+
+public class Connection {
+
+	// creare classe singlethon per restituire una connessione
+
+	public static Connection getConnection() {
+		return new Connection();
+	}
+
+	public void executeQUery(String query) {
+		// inserire metodo che esegue query e ritorna il result set
+	}
+}
+
+package com.crud.crud.dao;
+
+import java.util.List;
+
+import com.crud.crud.connection.Connection;
+import com.crud.crud.entity.Entity;
+
+public class Dao {
+
+	private static final String TABLE = "utente"; // nome table
+
+	private static final String[] COLUMNS = {
+			"nome", // colonna1
+			"cognome", // colonna2
+			"codice_fiscale" // colonna3
+	};
+
+	public Entity create(Entity e) {
+		String query = "INSERT INTO " + TABLE + " (" + getColumns() + ") VALUES ("
+				+ "'" + e.getNome() + "'"
+				+ "'" + e.getCognome() + "'"
+				+ "'" + e.getCodiceFiscale() + "'"
+				+ ")";
+		Connection.getConnection().executeQuery(query);
+		return e;
+	}
+
+	public Entity readById(String id) {
+		String query = "SELECT * FROM " + TABLE + " WHERE " + COLUMNS[2] + " = " + id;
+		// result set è una classe fittizzia inserire quella corretta del tipo di
+		// ritorno del metodo corretto della connessione
+		ResultSet r = Connection.getConnection().executeQuery(query);
+		// ritornare il primo elemento del result set
+		return r[0];
+
+	}
+
+	public List<Entity> readAll() {
+		String query = "SELECT * FROM " + TABLE;
+		// result set è una classe fittizzia inserire quella corretta del tipo di
+		// ritorno del metodo corretto della connessione
+		ResultSet r = Connection.getConnection().executeQuery(query);
+		// ritornare tutti i risultati mappati come la classe "entity"
+		return r;
+	}
+
+	public Entity update(Entity newEntity) {
+		String query = "UPDATE " + TABLE + " SET "
+				+ COLUMNS[0] + " = " + newEntity.getNome() + ", "
+				+ COLUMNS[1] + " = " + newEntity.getCognome()
+				+ " WHERE " + COLUMNS[2] + " = " + newEntity.getCodiceFiscale();
+		Connection.getConnection().executeQuery(query);
+		return newEntity;
+	}
+
+	public void delete(String codiceFiscale) {
+		String query = "DELETE FROM " + TABLE + " WHERE " + COLUMNS[2] + " = " + codiceFiscale;
+		Connection.getConnection().executeQuery(query);
+	}
+
+	private String getColumns() {
+		String s = "";
+		for (int i = 0; i < COLUMNS.length - 1; i++)
+			s += COLUMNS[i] + ", ";
+		s += COLUMNS[COLUMNS.length - 1];
+		return s;
+	}
+}
