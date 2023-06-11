@@ -1,0 +1,57 @@
+Apologies for the misunderstanding. Here are all the CRUD operations you can include in a DAO class in Java:
+
+Create:
+
+void create(Entity entity): Creates a new record by inserting the provided entity object into the database.
+Entity createAndReturn(Entity entity): Creates a new record and returns the newly created entity object.
+Read:
+
+Entity findById(Object id): Retrieves an entity by its unique identifier.
+List<Entity> findAll(): Retrieves all entities from the database.
+List<Entity> findByCriteria(Criteria criteria): Retrieves entities based on specific criteria or conditions.
+List<Entity> findByProperty(String propertyName, Object value): Retrieves entities by a specific property value.
+List<Entity> findByExample(Entity exampleEntity): Retrieves entities based on an example entity object.
+List<Entity> findByQuery(String query, Object... parameters): Retrieves entities using a custom query and optional parameters.
+Update:
+
+void update(Entity entity): Updates an existing entity in the database.
+void updateProperty(Object id, String propertyName, Object value): Updates a specific property of an entity.
+void updateByExample(Entity exampleEntity): Updates entities based on an example entity object.
+void updateByQuery(String query, Object... parameters): Updates entities using a custom query and optional parameters.
+Delete:
+
+void delete(Entity entity): Deletes an entity from the database.
+void deleteById(Object id): Deletes an entity by its unique identifier.
+void deleteByProperty(String propertyName, Object value): Deletes entities by a specific property value.
+void deleteAll(): Deletes all entities from the database.
+void deleteByQuery(String query, Object... parameters): Deletes entities using a custom query and optional parameters.
+Additionally, you may also consider including methods for pagination, sorting, and other specific requirements based on your application needs.
+
+Certainly! Here's an example of the query structure for each CRUD operation:
+
+Create:
+
+Insert Query: INSERT INTO table_name (column1, column2, ...) VALUES (?, ?, ...)
+Read:
+
+Select by ID Query: SELECT * FROM table_name WHERE id = ?
+Select All Query: SELECT * FROM table_name
+Select by Criteria Query: SELECT * FROM table_name WHERE <criteria>
+Select by Property Query: SELECT * FROM table_name WHERE property_name = ?
+Select by Example Query: SELECT * FROM table_name WHERE <example_conditions>
+Custom Query: <custom_query>
+Update:
+
+Update Query: UPDATE table_name SET column1 = ?, column2 = ..., WHERE id = ?
+Update Property Query: UPDATE table_name SET property_name = ? WHERE id = ?
+Update by Example Query: UPDATE table_name SET <updated_values> WHERE <example_conditions>
+Custom Update Query: <custom_update_query>
+Delete:
+
+Delete Query: DELETE FROM table_name WHERE id = ?
+Delete by Property Query: DELETE FROM table_name WHERE property_name = ?
+Delete All Query: DELETE FROM table_name
+Delete by Query: <custom_delete_query>
+Please note that these are general query structures, and you need to replace table_name, column1, column2, property_name, id, <criteria>, <example_conditions>, <custom_query>, <updated_values>, and <custom_delete_query> with the appropriate table and column names, criteria, conditions, or custom query strings based on your specific database schema and requirements.
+
+Additionally, don't forget to use proper parameter binding or sanitization techniques to prevent SQL injection vulnerabilities when using dynamic values in your queries.
