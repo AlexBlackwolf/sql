@@ -43,13 +43,34 @@ public class GameDAO {
         // occur during the database operation and prints the stack trace.
     }
 
-    public Game readGameName(String name) throws SQLException {
+    public List<Game> readAllGames() {
+        List<Game> allGames = new ArrayList<>();
+        String query = "SELECT * FROM games";
+        try (Connection conn = DriverManager.getConnection(URL, USERNAME, PASSWORD);
+             PreparedStatement statement = conn.prepareStatement(query)) {
+            ResultSet resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+                String name = resultSet.getString("name");
+                String genre = resultSet.getString("Genre");
+                Boolean goty = resultSet.getBoolean("Goty");
+                Integer price = resultSet.getInt("Price");
+                String publisher = resultSet.getString("Publisher");
+                Game game = new Game(name, genre, goty, price, publisher);
+                allGames.add(game);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return allGames;
+    }
+
+    public Game readGameName(String name) {
         //This line defines a method readGameName that takes a name parameter and returns a Game object.
         // It may throw a SQLException.
-        String query1 = "SELECT * FROM games WHERE name =?";
+        String query = "SELECT * FROM games WHERE name =?";
         //This line defines the SQL query string for retrieving a game based on the name.
         try (Connection conn = DriverManager.getConnection(URL, USERNAME, PASSWORD);
-             PreparedStatement statement = conn.prepareStatement(query1)) {
+             PreparedStatement statement = conn.prepareStatement(query)) {
             //This line establishes a connection to the database and prepares a statement for executing the SQL query.
             statement.setString(1, name);
             //These lines set the value of the parameter in the prepared statement and execute the SQL query to retrieve the data.
@@ -63,40 +84,56 @@ public class GameDAO {
                 System.out.println(selectGame);
                 return selectGame;
             }
-            return null;
-            //This block iterates over the result set to retrieve the game details,
-            // creates a Game object with the retrieved data, prints the game details,
-            // and returns the Game object. If no matching game is found, it returns null.
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
+        return null;
+        //This block iterates over the result set to retrieve the game details,
+        // creates a Game object with the retrieved data, prints the game details,
+        // and returns the Game object. If no matching game is found, it returns null.
     }
-        public List<Game> readGamePublisher(String publisher) throws SQLException {
-            //This line defines a method readGamePublisher that takes a publisher parameter
-            // and returns a list of Game objects. It may throw a SQLException
-            List<Game> gamePublishers = new ArrayList<>();
-            String query2 = "SELECT * FROM games WHERE publisher =?";
-            //These lines declare an empty List<Game> and define the SQL query
-            // string for retrieving games based on the publisher.
-            try (Connection conn = DriverManager.getConnection(URL, USERNAME, PASSWORD);
-                 PreparedStatement statement = conn.prepareStatement(query2)) {
-                //This line establishes a connection to the database and prepares a
-                // statement for executing the SQL query.
-                statement.setString(1, publisher);
-                ResultSet resultSet = statement.executeQuery();
-                //These lines set the value of the parameter in the prepared
-                // statement and execute the SQL query to retrieve the data
-                while (resultSet.next()) {
-                    String name = resultSet.getString("Name");
-                    String genre = resultSet.getString("Genre");
-                    Boolean goty = resultSet.getBoolean("Goty");
-                    Integer price = resultSet.getInt("Price");
-                    gamePublishers.add(new Game(name, genre, goty, price, publisher));
-                }
-                return gamePublishers;
-                //This block iterates over the result set to retrieve the game details,
-                // creates a Game object with the retrieved data and the provided publisher,
-                // and adds it to the gamePublishers list. Finally, it returns the
-                // populated list of games.
 
+    public List<Game> readGamePublisher(String publisher) {
+        //This line defines a method readGamePublisher that takes a publisher parameter
+        // and returns a list of Game objects. It may throw a SQLException
+        List<Game> gamePublishers = new ArrayList<>();
+        String query = "SELECT * FROM games WHERE publisher =?";
+        //These lines declare an empty List<Game> and define the SQL query
+        // string for retrieving games based on the publisher.
+        try (Connection conn = DriverManager.getConnection(URL, USERNAME, PASSWORD);
+             PreparedStatement statement = conn.prepareStatement(query)) {
+            //This line establishes a connection to the database and prepares a
+            // statement for executing the SQL query.
+            statement.setString(1, publisher);
+            ResultSet resultSet = statement.executeQuery();
+            //These lines set the value of the parameter in the prepared
+            // statement and execute the SQL query to retrieve the data
+            while (resultSet.next()) {
+                String name = resultSet.getString("Name");
+                String genre = resultSet.getString("Genre");
+                Boolean goty = resultSet.getBoolean("Goty");
+                Integer price = resultSet.getInt("Price");
+                gamePublishers.add(new Game(name, genre, goty, price, publisher));
             }
+            return gamePublishers;
+            //This block iterates over the result set to retrieve the game details,
+            // creates a Game object with the retrieved data and the provided publisher,
+            // and adds it to the gamePublishers list. Finally, it returns the
+            // populated list of games.
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
         }
     }
+    public void deleteGame(String name) {
+        String query = "DELETE FROM games WHERE name = ?";
+        try (Connection conn = DriverManager.getConnection(URL, USERNAME, PASSWORD);
+             PreparedStatement statement = conn.prepareStatement(query)) {
+            statement.setString(1, name);
+            statement.executeUpdate();
+            System.out.println("game deleted!");
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+}
